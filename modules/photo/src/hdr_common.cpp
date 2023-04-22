@@ -100,11 +100,13 @@ void mapLuminance(Mat src, Mat dst, Mat lum, Mat new_lum, float saturation)
 
 Mat linearResponse(int channels)
 {
-    Mat response = Mat(LDR_SIZE, 1, CV_MAKETYPE(CV_32F, channels));
-    for(int i = 0; i < LDR_SIZE; i++) {
-        response.at<Vec3f>(i) = Vec3f::all(static_cast<float>(i));
+    Mat response = Mat(LDR_SIZE, channels, CV_32F);
+    for (int i = 0; i < LDR_SIZE; i++) {
+        for (int j = 0; j < channels; ++j) {
+            response.at<float>(i, j) = static_cast<float>(i);
+        }
     }
-    return response;
+    return response.reshape(channels);
 }
 
 }
